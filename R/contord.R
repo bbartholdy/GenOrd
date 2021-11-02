@@ -2,7 +2,7 @@ contord<-function (marginal, Sigma, support = list(), Spearman = FALSE)
 {
     if (!all(unlist(lapply(marginal, function(x) (sort(x)==x & min(x)>0 & max(x)<1))))) 
         stop("Error in assigning marginal distributions!")
-    if(!isSymmetric(Sigma) | min(eigen(Sigma)$values)<0 | all.equal(diag(unname(Sigma)), rep(1, nrow(Sigma)))) stop("Correlation matrix not valid!")
+    if(!isSymmetric(Sigma) | min(eigen(Sigma)$values)<0 | !all.equal(diag(unname(Sigma)), rep(1, nrow(Sigma)))) stop("Correlation matrix not valid!")
     len <- length(support)
     k <- length(marginal)
     kj <- numeric(k)
