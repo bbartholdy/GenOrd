@@ -16,7 +16,7 @@ ordcont<-function (marginal, Sigma, support = list(), Spearman = FALSE,
     }
     for (g in 2:k) {
         if (det(Sigma[1:g, 1:g]) <= 0) {
-            stop("Main minor number ", g, " is not positive!", 
+            warning("Main minor number ", g, " is not positive!", 
                 "\n")
         }
     }
