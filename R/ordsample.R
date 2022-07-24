@@ -2,7 +2,9 @@ ordsample <-
 function(n, marginal, Sigma, support=list(), Spearman=FALSE, cormat="discrete", tol = 1e-6)
 {
     if (!all(unlist(lapply(marginal, function(x) (sort(x)==x & min(x)>0 & max(x)<1))))) stop("Error in assigning marginal distributions!")
-    if(!isSymmetric(Sigma) | min(eigen(Sigma)$values)<0 | !all.equal(diag(unname(Sigma)), rep(1, nrow(Sigma)))) stop("Correlation matrix not valid!")
+    if(!isSymmetric(Sigma)) stop("Correlation matrix not symmetric")
+    if(min(eigen(Sigma)$values)<0) stop("Correlation matrix contains negative eigenvalues")
+    if(!all.equal(diag(unname(Sigma)), rep(1, nrow(Sigma)))) stop("Correlation matrix diagonal not equal to 1")
 # k=number of variables
 k <- length(marginal)
 # kj=number of categories for the k variables (vector of k integer numbers)
