@@ -1,8 +1,10 @@
 ordsample <-
-function(n, marginal, Sigma, support=list(), Spearman=FALSE, cormat="discrete")
+function(n, marginal, Sigma, support=list(), Spearman=FALSE, cormat="discrete", tol = 1e-6)
 {
     if (!all(unlist(lapply(marginal, function(x) (sort(x)==x & min(x)>0 & max(x)<1))))) stop("Error in assigning marginal distributions!")
-    if(!isSymmetric(Sigma) | min(eigen(Sigma)$values)<0 | !all(diag(Sigma)==1)) stop("Correlation matrix not valid!")
+    if(!isSymmetric(Sigma)) warning("Correlation matrix not symmetric")
+    if(min(eigen(Sigma)$values)<0) warning("Correlation matrix contains negative eigenvalues")
+    if(!all.equal(diag(unname(Sigma)), rep(1, nrow(Sigma)))) warning("Correlation matrix diagonal not equal to 1")
 # k=number of variables
 k <- length(marginal)
 # kj=number of categories for the k variables (vector of k integer numbers)
@@ -22,7 +24,7 @@ Sigmac <- ordcont(marginal=marginal, Sigma=Sigma, support=support, Spearman=Spea
 Sigma <- Sigmac
 }
 # sample of size n from k-dimensional normal with vector of zero means and correlation matrix Sigma
-valori <- mvrnorm(n, rep(0, k), Sigma)
+valori <- mvrnorm(n, rep(0, k), Sigma, tol = tol)
 if(n==1) valori <- matrix(valori,nrow=1)
 # discretization according to the marginal distributions
 for(i in 1:k)
